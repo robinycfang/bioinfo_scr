@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
 # This script is used to extract intron coordinates from a gtf file.
 # It additionally outputs a file to collect all single-exon transcripts.
 
@@ -26,9 +23,8 @@ exons = exons.sort_values(by = [0, 9, 3]).reset_index(drop = True)
 
 
 # iterate through exons to distinguish between single and multiple -exon transcripts
-
-sig_ex_trans = ''
-multi_ex_trans = ''
+sig = open(out_sig_ex_trans_path, 'a')
+mul = open(out_intron_gtf_path, 'a')
 multi = False
 meter = 1
 
@@ -46,16 +42,18 @@ try:
         # for single-exon transcripts
         if this_trans != next_trans:
             if multi == False:
-                sig_ex_trans += str(chromosome) + '\t' + source + '\t' + 'exon' + '\t' + str(start_exon) + '\t' + str(end_exon) + \
+                sig_ex_trans = str(chromosome) + '\t' + source + '\t' + 'exon' + '\t' + str(start_exon) + '\t' + str(end_exon) + \
                             '\t' + '.' + '\t' + strand + '\t' + '.' + '\t' + info + '\n'
+                sig.write(sig_ex_trans)
 
         # for multiple-exon transcripts
         if this_trans == next_trans:
             multi = True
             start_intron = end_exon + 1
             end_intron = exons.loc[i + 1, 3] - 1
-            multi_ex_trans +=  str(chromosome) + '\t' + source + '\t' + 'intron' + '\t' + str(start_intron) + '\t' + str(end_intron) + \
+            multi_ex_trans =  str(chromosome) + '\t' + source + '\t' + 'intron' + '\t' + str(start_intron) + '\t' + str(end_intron) + \
                                 '\t' + '.' + '\t' + strand + '\t' + '.' + '\t' + info + '\n'
+            mul.write(multi_ex_trans)
         else:   # for the last exon in a multiple-exon transcript
             multi = False
 
@@ -65,15 +63,11 @@ try:
 # for the last line in the gtf file
 except KeyError:
     if multi == False:   # if the last line is single_exon transcript
-        sig_ex_trans += str(chromosome) + '\t' + source + '\t' + 'exon' + '\t' + str(start_exon) + '\t' + str(end_exon) + \
+        sig_ex_trans = str(chromosome) + '\t' + source + '\t' + 'exon' + '\t' + str(start_exon) + '\t' + str(end_exon) + \
                             '\t' + '.' + '\t' + strand + '\t' + '.' + '\t' + info + '\n'
+        sig.write(sig_ex_trans)
     else:   # if multiple
         print(str(meter) + '/' + str(len(exons)) + ' done.')
 
-
-# save stuff!!!
-with open(out_sig_ex_trans_path, 'w') as w:
-    w.write(sig_ex_trans)
-
-with open(out_intron_gtf_path, 'w') as w:
-    w.write(multi_ex_trans)
+sig.close()
+mul.close()
