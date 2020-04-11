@@ -1,5 +1,5 @@
 # Made by YF
-# This script walks down a directory, list names of all the files in the directory, and optionally calculate their md5 values.
+# This script walks down a directory, lists names of all the files in the directory, and optionally calculates their md5 values.
 # Two outputs will be created:
 # file_list.txt: drive_name, file_path, md5
 # error_list.txt: contains the paths of files that can't be read
