@@ -35,8 +35,8 @@ def MD5(file_path, block_size = 2**20):
 # WINDOWS WARNING:
 # set encoding to utf-8, cuz the windows writer uses gbk as default and it can't encode weird simbols in the file names
 # python 2.7 doesn't have the encoding argument
-final_df = open(out_dir + 'file_list.txt', 'a', encoding = 'utf-8')
-err = open(out_dir + 'error_list.txt', 'a', encoding = 'utf-8')
+final_df = open(out_dir + drive_name + '_file_list.txt', 'a', encoding = 'utf-8')
+err = open(out_dir + drive_name + '_error_list.txt', 'a', encoding = 'utf-8')
 
 # Hard drives have some hidden files that should be filtered out.
 # Add more in the garbage bin if you want...partial names are fine!
